@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 import javax.swing.JFileChooser;
 
 import deporte.modelo.FileManager;
-import deporte.vista.DeporteInterfaz;
+import deporte.vista.interfaz.DeporteInterfaz;
 import deporte.vista.jdialog.AboutDialog;
 
 public class ControladorBotones implements ActionListener{

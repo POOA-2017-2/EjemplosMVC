@@ -4,7 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import deporte.modelo.Jugador;
-import deporte.vista.CanchaInterfaz;
+import deporte.vista.interfaz.CanchaInterfaz;
 
 public class ControladorJugador extends KeyAdapter {
 
