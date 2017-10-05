@@ -1,4 +1,4 @@
-package deporte.vista;
+package deporte.vista.interfaz;
 
 public interface CanchaInterfaz {
 	

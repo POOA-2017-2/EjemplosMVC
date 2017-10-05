@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import deporte.controlador.ControladorJugador;
-import deporte.vista.CanchaInterfaz;
+import deporte.vista.interfaz.CanchaInterfaz;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

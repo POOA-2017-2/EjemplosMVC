@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import deporte.controlador.ControladorBotones;
+import deporte.vista.interfaz.DeporteInterfaz;
 import deporte.vista.jdialog.AboutDialog;
 import deporte.vista.panel.Cancha;
 import deporte.vista.panel.Silvato;
