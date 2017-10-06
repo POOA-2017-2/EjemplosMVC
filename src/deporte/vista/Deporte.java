@@ -55,12 +55,12 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		int alto=java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 		int ancho=java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-		int hv=300;
-		int wv=450;
+		int hv=550;
+		int wv=750;
 		int x= (ancho/2) - (wv/2);
 		int y= (alto/2) - (hv/2);
 		setBounds(x, y, wv, hv);
-		//setResizable(false);
+		setResizable(false);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

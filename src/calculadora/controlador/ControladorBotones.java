@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import calculadora.modelo.Operaciones;
 import calculadora.vista.CalculadoraInterfaz;
 
-public class ControladorBotones implements ActionListener {
+public class ControladorBotones implements ActionListener{
 
 	private Operaciones modelo;
 	private CalculadoraInterfaz vista;
@@ -43,5 +43,6 @@ public class ControladorBotones implements ActionListener {
 		vista.setResultado(resultado);
 		
 	}
+
 
 }

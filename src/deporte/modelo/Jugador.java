@@ -1,6 +1,6 @@
 package deporte.modelo;
 
-import java.awt.event.KeyEvent;
+import java.awt.Rectangle;
 
 public class Jugador {
 
@@ -34,19 +34,25 @@ public class Jugador {
 		this.y = y;
 	}
 
-	public Jugador mover(int code){
-	
-		if(code==KeyEvent.VK_LEFT){
+	public Jugador mover(Rectangle r,boolean left, boolean right, boolean up, boolean down){
+		double xCancha=r.getX();
+		double yCancha=r.getY();
+		double widthCancha=r.getWidth();
+		double heightCancha=r.getHeight();
+		
+		if(left && getX()>xCancha){
 			setX(getX()-5);
+			System.out.println(getX());
 			
 		}
-		else if(code==KeyEvent.VK_RIGHT){
+		if(right && getX()<(widthCancha)){
 			setX(getX()+5);
 		}
-		else if(code==KeyEvent.VK_UP){
+		if(up && getY()>yCancha){
 			setY(getY()-5);
+			System.out.println(getY());
 		}
-		else if(code==KeyEvent.VK_DOWN){
+		if(down && getY()<(heightCancha-20)){
 			setY(getY()+5);
 		}
 		
