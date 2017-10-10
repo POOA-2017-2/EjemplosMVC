@@ -1,7 +1,4 @@
 package deporte.vista.panel;
-
-import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -13,8 +10,6 @@ import javax.swing.JPanel;
 import deporte.controlador.ControladorJugador;
 import deporte.vista.interfaz.CanchaInterfaz;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 

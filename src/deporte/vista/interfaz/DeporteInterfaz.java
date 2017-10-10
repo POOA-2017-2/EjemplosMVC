@@ -2,8 +2,6 @@ package deporte.vista.interfaz;
 
 import java.awt.Component;
 
-import javax.swing.JPanel;
-
 public interface DeporteInterfaz {
 	public Component getWriteObject();
 	public Component getComponentShow();

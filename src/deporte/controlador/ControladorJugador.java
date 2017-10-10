@@ -1,6 +1,5 @@
 package deporte.controlador;
 
-import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -58,5 +57,8 @@ public class ControladorJugador extends KeyAdapter {
 			down=false;
 			break;
 		}
+		
+		jug=jug.mover(vista.getCancha(),left, right, up, down);
+		vista.actualizar(jug.getX(),jug.getY());
 	}
 }

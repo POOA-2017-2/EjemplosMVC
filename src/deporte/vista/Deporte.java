@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 
 import deporte.controlador.ControladorBotones;
 import deporte.vista.interfaz.DeporteInterfaz;
-import deporte.vista.jdialog.AboutDialog;
 import deporte.vista.panel.Cancha;
 import deporte.vista.panel.Silvato;
 
@@ -17,18 +16,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.awt.event.ActionEvent;
 
 public class Deporte extends JFrame implements DeporteInterfaz {
 
