@@ -1,5 +1,6 @@
 package deporte.vista.interfaz;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 
 public interface CanchaInterfaz {

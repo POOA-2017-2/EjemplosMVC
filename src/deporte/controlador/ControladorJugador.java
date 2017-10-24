@@ -57,8 +57,8 @@ public class ControladorJugador extends KeyAdapter {
 			down=false;
 			break;
 		}
-		
 		jug=jug.mover(vista.getCancha(),left, right, up, down);
 		vista.actualizar(jug.getX(),jug.getY());
+
 	}
 }
