@@ -1,44 +1,43 @@
 package deporte.vista;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import deporte.controlador.ClienteConexion;
 import deporte.controlador.ControladorBotones;
 import deporte.vista.interfaz.DeporteInterfaz;
 import deporte.vista.panel.Cancha;
 import deporte.vista.panel.Silvato;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable {
 
-import java.awt.CardLayout;
-import java.awt.Component;
-
-public class Deporte extends JFrame implements DeporteInterfaz {
 
 	private JPanel contentPane;
 	private JPanel pnlJuego ;
 	private Cancha pnlCancha;
-	private JButton btnPlay ;
-	private JButton btnPause;
+	private ServerSocket servidor;
 	private Socket cliente;
-	
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Deporte frame = new Deporte();
+					DeporteServidor frame = new DeporteServidor();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,14 +46,18 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 		});
 	}
 
-	public Deporte() throws IOException {
-		cliente=new Socket("127.0.0.1",8000);
-		init();
+	public DeporteServidor() throws IOException{
+
+		servidor=new ServerSocket(8000);
+		init(); // metodo que construye la interfaz
+		Thread t=new Thread(this);
+		t.start();
 		
 	}
 
 	public void init(){
-		setTitle("Cliente");
+		
+		setTitle("SERVIDOR");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		int alto=java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 		int ancho=java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -64,43 +67,10 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 		int y= (alto/2) - (hv/2);
 		setBounds(x, y, wv, hv);
 		setResizable(false);
-		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenu mnArchivo = new JMenu("Archivo");
-		menuBar.add(mnArchivo);
-		
-		JMenuItem mntmNuevo = new JMenuItem("Nuevo");
-		mntmNuevo.setIcon(new ImageIcon(Deporte.class.getResource("/img/hucha.png")));
-		mnArchivo.add(mntmNuevo);
-		
-		JMenuItem mntmGuardar = new JMenuItem("Guardar");
-		
-		mnArchivo.add(mntmGuardar);
-		
-		JMenu mnAyuda = new JMenu("Ayuda");
-		menuBar.add(mnAyuda);
-		
-		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de ...");
-		mnAyuda.add(mntmAcercaDe);
-		
-		JMenuItem mntmReglas = new JMenuItem("Reglas");
-		mnAyuda.add(mntmReglas);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
-		JPanel pnlBotones = new JPanel();
-		contentPane.add(pnlBotones, BorderLayout.NORTH);
-		
-		btnPlay = new JButton("Play");
-
-		pnlBotones.add(btnPlay);
-		
-		btnPause = new JButton("Pause");
-		pnlBotones.add(btnPause);
 		
 		pnlJuego = new JPanel();
 		contentPane.add(pnlJuego, BorderLayout.CENTER);
@@ -109,23 +79,12 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 		Silvato pnlPresentacion=new Silvato();
 		pnlJuego.add(pnlPresentacion,"Silbato");
 		
-		pnlCancha=new Cancha(cliente,"Cliente");
+		pnlCancha=new Cancha(cliente,"Servidor");
 		pnlJuego.add(pnlCancha,"Cancha");
-		
-		
-		ControladorBotones ctlBotones=new ControladorBotones(this,cliente);
-	
-		btnPlay.setActionCommand("play");
-		btnPlay.addActionListener(ctlBotones);
-		
-		mntmGuardar.setActionCommand("save");
-		mntmGuardar.addActionListener(ctlBotones);
-		
-		mntmAcercaDe.setActionCommand("acerca");
-		mntmAcercaDe.addActionListener(ctlBotones);
 	}
-	@Override
 	
+	
+	@Override
 	public Component getWriteObject() {
 		return pnlCancha;
 	}
@@ -136,16 +95,15 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 		return pnlCancha;
 	}
 
-
 	@Override
 	public void setFocusablePlay(boolean focus) {
-		btnPlay.setFocusable(focus);
+		//btnPlay.setFocusable(focus);
 		
 	}
 
 	@Override
 	public void setFocusablePause(boolean focus) {
-		btnPause.setFocusable(focus);	
+		//btnPause.setFocusable(focus);	
 	}
 
 	@Override
@@ -157,6 +115,23 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 	public void showCancha() {
 		CardLayout c= (CardLayout)pnlJuego.getLayout();
 		c.show(pnlJuego, "Cancha");
+		
+	}
+
+
+	@Override
+	public void run() {
+		while(true){
+			try {
+				cliente=servidor.accept();
+				pnlCancha.setCliente(cliente);
+				ClienteConexion cc=new ClienteConexion(this,cliente);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 

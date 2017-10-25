@@ -3,18 +3,16 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import deporte.controlador.ControladorJugador;
+import deporte.modelo.Paquete;
 import deporte.vista.interfaz.CanchaInterfaz;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 
 public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
@@ -27,10 +25,17 @@ public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 	private Image currentFrame;
 	private Rectangle cancha;
 	private ControladorJugador control;
+	private String type;
+	
+	private Socket cliente;
+	private ObjectOutputStream output;
+
 	int first=0;
 	
-	public Cancha() {
+	public Cancha(Socket cliente, String type) {
 
+		this.cliente=cliente;
+		this.type=type;
 		setLayout(null);
 			
 		jugador= new JLabel();
@@ -53,9 +58,6 @@ public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 		int y=getHeight()/2-image.getHeight(this)/2;
 		g.drawImage(image, x, y,this );
 		
-
-		
-		
 		cancha=new Rectangle(x, y, aux.getIconWidth(), aux.getIconHeight());
 		
 	
@@ -63,30 +65,12 @@ public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 			x=getWidth()/2 - 20;
 			y=getHeight()/2-20;
 			jugador.setBounds(x, y, 40, 40);
-			Thread t=new Thread(this);
-			t.start();
-		}
-		
-		/*
-		Image j=null;
-		if(first==0){
-			xJugador=getWidth()/2 - 20;
-			yJugador=getHeight()/2-20;
-			first++;
-			j=jugador.getSubimage(0, 0, 32, 32);
-			Thread t=new Thread(this);
-			control=new ControladorJugador(this);
-			addKeyListener(control);
-			//t.start();
-		}
-		else{
-			j=currentFrame;
-			System.out.println("entra");
-		}
-	
-		g.drawImage(j, xJugador, yJugador,this);	
-		*/
+			if(type.equals("Cliente")){
+				Thread t=new Thread(this);
+				t.start();
+			}
 
+		}
 		
 	}
 
@@ -108,14 +92,13 @@ public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 	}
 
 	@Override
-	public void actualizar(int x, int y) {
-		// TODO Auto-generated method stub
-		//jugador.
+	public void actualizar(int x, int y) throws IOException {
+		
+		output=new ObjectOutputStream(cliente.getOutputStream());
+		Paquete paquete=new Paquete(x, y, "ACTUALIZAR");
+		output.writeObject(paquete);
 		jugador.setBounds(x, y, 40, 40);
-		//xJugador=x;
-		//yJugador=y;
-		//this.currentFrame=imagen;
-		//repaint();
+
 	}
 
 	@Override
@@ -123,5 +106,17 @@ public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 		control=new ControladorJugador(this);
 		addKeyListener(control);
 
+	}
+
+	@Override
+	public JLabel getJugador() {
+		// TODO Auto-generated method stub
+		return jugador;
+	}
+
+	@Override
+	public void setCliente(Socket cliente) {
+		this.cliente=cliente;
+		
 	}
 }

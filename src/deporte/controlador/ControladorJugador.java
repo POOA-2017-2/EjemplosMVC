@@ -2,6 +2,7 @@ package deporte.controlador;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import deporte.modelo.Jugador;
 import deporte.vista.interfaz.CanchaInterfaz;
@@ -38,7 +39,12 @@ public class ControladorJugador extends KeyAdapter {
 			break;
 		}
 		jug=jug.mover(vista.getCancha(),left, right, up, down);
-		vista.actualizar(jug.getX(),jug.getY());
+		try {
+			vista.actualizar(jug.getX(),jug.getY());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public void keyReleased(KeyEvent e){
@@ -58,7 +64,12 @@ public class ControladorJugador extends KeyAdapter {
 			break;
 		}
 		jug=jug.mover(vista.getCancha(),left, right, up, down);
-		vista.actualizar(jug.getX(),jug.getY());
+		try {
+			vista.actualizar(jug.getX(),jug.getY());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 	}
 }
