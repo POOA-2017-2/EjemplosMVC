@@ -14,5 +14,4 @@ public interface CanchaInterfaz {
 	public Rectangle getCancha();
 	public void actualizar(int x, int y) throws IOException;
 	public JLabel getJugador();
-	public void setCliente(Socket cliente);
 }

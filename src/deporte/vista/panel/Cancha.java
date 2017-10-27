@@ -92,12 +92,11 @@ public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 	}
 
 	@Override
-	public void actualizar(int x, int y) throws IOException {
-		
+	public void actualizar(int x, int y) throws IOException {	
 		output=new ObjectOutputStream(cliente.getOutputStream());
 		Paquete paquete=new Paquete(x, y, "ACTUALIZAR");
 		output.writeObject(paquete);
-		jugador.setBounds(x, y, 40, 40);
+		jugador.setBounds(x,y,40,40);
 
 	}
 
@@ -114,9 +113,5 @@ public class Cancha extends JPanel implements CanchaInterfaz, Runnable{
 		return jugador;
 	}
 
-	@Override
-	public void setCliente(Socket cliente) {
-		this.cliente=cliente;
-		
-	}
+
 }

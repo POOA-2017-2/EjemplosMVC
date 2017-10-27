@@ -2,6 +2,8 @@ package deporte.vista;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,13 +20,14 @@ import deporte.vista.panel.Silvato;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import java.awt.CardLayout;
 import java.awt.Component;
 
-public class Deporte extends JFrame implements DeporteInterfaz {
+public class Deporte extends JFrame implements DeporteInterfaz, Runnable {
 
 	private JPanel contentPane;
 	private JPanel pnlJuego ;
@@ -32,7 +35,7 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 	private JButton btnPlay ;
 	private JButton btnPause;
 	private Socket cliente;
-	
+	private DataInputStream input;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -50,6 +53,8 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 	public Deporte() throws IOException {
 		cliente=new Socket("127.0.0.1",8000);
 		init();
+		Thread t=new Thread(this);
+		t.start();
 		
 	}
 
@@ -157,6 +162,25 @@ public class Deporte extends JFrame implements DeporteInterfaz {
 	public void showCancha() {
 		CardLayout c= (CardLayout)pnlJuego.getLayout();
 		c.show(pnlJuego, "Cancha");
+		
+	}
+
+	@Override
+	public void run() {
+	// while(true){
+		try {
+			input=new DataInputStream(cliente.getInputStream());
+			String mensaje=input.readUTF();
+			if(mensaje.equals("DESCONECTAR")){
+				JOptionPane.showMessageDialog(this,"Lo siento el servidor se ha detenido", "DESCONECTADO", JOptionPane.INFORMATION_MESSAGE);
+				cliente.close();
+				System.exit(0);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	//}
 		
 	}
 

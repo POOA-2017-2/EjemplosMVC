@@ -14,11 +14,13 @@ public class ClienteConexion implements Runnable{
 	private ObjectInputStream input;
 	private Thread t;
 	private DeporteInterfaz vista;
+	private CanchaInterfaz vistaCancha;
 	
-	public ClienteConexion(DeporteInterfaz vista,Socket cliente) {
+	public ClienteConexion(DeporteInterfaz vista,CanchaInterfaz vistaCancha,Socket cliente) {
 		// TODO Auto-generated constructor stub
 		this.cliente=cliente;
 		this.vista=vista;
+		this.vistaCancha=vistaCancha;
 		t=new Thread(this);
 		t.start();
 	}
@@ -31,6 +33,7 @@ public class ClienteConexion implements Runnable{
 				String tipo=paquete.getTipo();
 				if(tipo.equals("ACTUALIZAR")){
 					// actualizar posicion de jugador
+					vistaCancha.getJugador().setBounds(paquete.getX(),paquete.getY(),40,40);
 				}
 				else{
 					// pintar cancha

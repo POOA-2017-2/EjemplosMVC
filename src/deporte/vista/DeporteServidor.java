@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
@@ -23,6 +24,8 @@ import deporte.controlador.ControladorBotones;
 import deporte.vista.interfaz.DeporteInterfaz;
 import deporte.vista.panel.Cancha;
 import deporte.vista.panel.Silvato;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable {
 
@@ -32,6 +35,9 @@ public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable 
 	private Cancha pnlCancha;
 	private ServerSocket servidor;
 	private Socket cliente;
+	private JPanel pnlBotones;
+	private JButton btnDesconectar;
+	private DataOutputStream output;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -81,6 +87,25 @@ public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable 
 		
 		pnlCancha=new Cancha(cliente,"Servidor");
 		pnlJuego.add(pnlCancha,"Cancha");
+		
+		pnlBotones = new JPanel();
+		contentPane.add(pnlBotones, BorderLayout.NORTH);
+		
+		btnDesconectar = new JButton("Desconectar");
+		btnDesconectar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					output=new DataOutputStream(cliente.getOutputStream());
+					output.writeUTF("DESCONECTAR");
+					cliente.close();
+					servidor.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		pnlBotones.add(btnDesconectar);
 	}
 	
 	
@@ -124,8 +149,7 @@ public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable 
 		while(true){
 			try {
 				cliente=servidor.accept();
-				pnlCancha.setCliente(cliente);
-				ClienteConexion cc=new ClienteConexion(this,cliente);
+				ClienteConexion cc=new ClienteConexion(this,pnlCancha,cliente);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
