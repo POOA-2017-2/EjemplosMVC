@@ -15,28 +15,33 @@ public class ClienteConexion implements Runnable{
 	private Thread t;
 	private DeporteInterfaz vista;
 	private CanchaInterfaz vistaCancha;
+	private boolean activo;
 	
 	public ClienteConexion(DeporteInterfaz vista,CanchaInterfaz vistaCancha,Socket cliente) {
 		// TODO Auto-generated constructor stub
 		this.cliente=cliente;
 		this.vista=vista;
 		this.vistaCancha=vistaCancha;
+		activo=true;
 		t=new Thread(this);
 		t.start();
 	}
 
 	public void run() {
-		while(true){
+		while(activo){
 			try {
 				input=new ObjectInputStream(cliente.getInputStream());
+				System.out.println("CLIENTE-CONEXION:ESPERANDO MENSAJE");
 				Paquete paquete=(Paquete) input.readObject();
 				String tipo=paquete.getTipo();
 				if(tipo.equals("ACTUALIZAR")){
 					// actualizar posicion de jugador
+					System.out.println("CLIENTE-CONEXION:LLEGO MENSAJE DE ACTUALIZAR");
 					vistaCancha.getJugador().setBounds(paquete.getX(),paquete.getY(),40,40);
 				}
 				else{
 					// pintar cancha
+					System.out.println("CLIENTE-CONEXION:LLEGO MENSAJE PLAY");
 					vista.showCancha();
 					vista.setFocusablePlay(false);
 					vista.setFocusablePause(false);
@@ -44,9 +49,11 @@ public class ClienteConexion implements Runnable{
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				activo=false;
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
+				activo=false;
 				e.printStackTrace();
 			}
 		}

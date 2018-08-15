@@ -170,9 +170,12 @@ public class Deporte extends JFrame implements DeporteInterfaz, Runnable {
 	// while(true){
 		try {
 			input=new DataInputStream(cliente.getInputStream());
+			System.out.println("CLIENTE:ESPERANDO MENSAJE");
 			String mensaje=input.readUTF();
 			if(mensaje.equals("DESCONECTAR")){
-				JOptionPane.showMessageDialog(this,"Lo siento el servidor se ha detenido", "DESCONECTADO", JOptionPane.INFORMATION_MESSAGE);
+				System.out.println("CLIENTE:LLEGO MENSAJE DE DESCONECCION");
+				JOptionPane.showMessageDialog(
+						this,"Lo siento el servidor se ha detenido", "DESCONECTADO", JOptionPane.INFORMATION_MESSAGE);
 				cliente.close();
 				System.exit(0);
 			}

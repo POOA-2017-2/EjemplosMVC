@@ -38,6 +38,7 @@ public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable 
 	private JPanel pnlBotones;
 	private JButton btnDesconectar;
 	private DataOutputStream output;
+	private boolean activo;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -56,6 +57,7 @@ public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable 
 
 		servidor=new ServerSocket(8000);
 		init(); // metodo que construye la interfaz
+		activo=true;
 		Thread t=new Thread(this);
 		t.start();
 		
@@ -97,6 +99,7 @@ public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable 
 				try {
 					output=new DataOutputStream(cliente.getOutputStream());
 					output.writeUTF("DESCONECTAR");
+					activo=false;
 					cliente.close();
 					servidor.close();
 				} catch (IOException e1) {
@@ -146,13 +149,16 @@ public class DeporteServidor extends JFrame implements DeporteInterfaz,Runnable 
 
 	@Override
 	public void run() {
-		while(true){
+		while(activo){
 			try {
+				System.out.println("SERVIDOR:Esperando un Cliente");
 				cliente=servidor.accept();
+				System.out.println("SERVIDOR:CLIENTE ACEPTADO");
 				ClienteConexion cc=new ClienteConexion(this,pnlCancha,cliente);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				activo=false;
 				e.printStackTrace();
 			}
 		}
